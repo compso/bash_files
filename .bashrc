@@ -2,6 +2,8 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+#set -x;
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -114,7 +116,7 @@ if ! shopt -oq posix; then
 fi
 # .bashrc
 
-export PATH=${PATH}:~/bin
+export PATH=~/bin:${PATH}
 
 # Uncomment this line to show envs as they are sourced
 #set -x 
@@ -132,7 +134,13 @@ export PS1="\[\e[1;32m\]\u: \w \[\e[0m\]> "
 PROMPT_COMMAND='printf "\033]0;${USER}@${HOSTNAME%%.*}  (${SHOW} - ${WORKSPACE})"; printf "\007"'
 
 source /etc/bash_completion.d/git
-source ~/.git_aliases
+if [ -f ~/.git-prompt.sh ];then
+  source ~/.git-prompt.sh
+  export GIT_PS1_DESCRIBE_STYLE='describe'
+  export GIT_PS1_SHOWCOLORHINTS=1
+  export GIT_PS1_SHOWDIRTYSTATE=1
+  export PROMPT_COMMAND='__git_ps1 "\[\e[1;32m\]\u: \w \[\e[0m\]" "\\$ "'
+fi
 
 
 
